@@ -27,13 +27,25 @@ cd skills
 
 ## Authenticate
 
-All methods need a MeltFlex API key in your environment:
+All methods need a MeltFlex API key. You need an **active subscription** (any paid plan) — get one at <https://www.meltflexai.com/settings>. Without an active subscription the key won't work.
 
-```bash
-export MELTFLEX_API_KEY="mf_sk_xxxxxxxxxxxx"
-```
+### Where to find your API key
 
-Get a key at <https://www.meltflexai.com/settings> (any active subscription). Generations are billed to your own account credits (10 per image, auto-refunded on failure).
+1. Open your **account settings** and click **API Key** under Profile:
+
+   ![Settings — click API Key](https://www.meltflexai.com/api-docs/step-profile.webp)
+
+2. Click **Generate API Key**. The key is shown only once — copy it immediately:
+
+   ![Generate API Key](https://www.meltflexai.com/api-docs/step-generate.webp)
+
+3. Export it:
+
+   ```bash
+   export MELTFLEX_API_KEY="mf_sk_xxxxxxxxxxxx"
+   ```
+
+Generations are billed to your own account credits (10 per image, auto-refunded on failure).
 
 ## Optional: MeltFlex MCP server
 

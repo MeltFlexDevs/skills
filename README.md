@@ -48,7 +48,14 @@ More options in [INSTALL.md](./INSTALL.md). Agent-driven install (paste into you
 
 ## Authenticate
 
-Get an API key at <https://www.meltflexai.com/settings> (any active subscription), then expose it:
+You need an **active subscription** (any paid plan) — without one the key won't work. After subscribing at <https://www.meltflexai.com/settings>, open **account settings** → **API Key** under Profile, then **Generate API Key** (shown once — copy it):
+
+<p align="center">
+  <img src="https://www.meltflexai.com/api-docs/step-profile.webp" width="48%" alt="Settings — click API Key" />
+  <img src="https://www.meltflexai.com/api-docs/step-generate.webp" width="48%" alt="Generate API Key" />
+</p>
+
+Then expose it:
 
 ```bash
 export MELTFLEX_API_KEY="mf_sk_xxxxxxxxxxxx"
