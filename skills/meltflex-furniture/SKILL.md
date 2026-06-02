@@ -11,7 +11,7 @@ For general restyling without specific products, use `/meltflex:design`.
 
 ## Prerequisites
 
-A MeltFlex API key (`mf_sk_...`, Growth plan or higher) in `MELTFLEX_API_KEY`. Get one at <https://www.meltflexai.com/settings>. Each generation costs **10 credits** (auto-refunded on failure), billed to the user's account.
+A MeltFlex API key (`mf_sk_...`, any active subscription) in `MELTFLEX_API_KEY`. Get one at <https://www.meltflexai.com/settings>. Each generation costs **10 credits** (auto-refunded on failure), billed to the user's account.
 
 ## Endpoint
 

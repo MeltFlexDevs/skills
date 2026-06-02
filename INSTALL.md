@@ -33,7 +33,7 @@ All methods need a MeltFlex API key in your environment:
 export MELTFLEX_API_KEY="mf_sk_xxxxxxxxxxxx"
 ```
 
-Get a key at <https://www.meltflexai.com/settings> (Growth plan or higher). Generations are billed to your own account credits (10 per image, auto-refunded on failure).
+Get a key at <https://www.meltflexai.com/settings> (any active subscription). Generations are billed to your own account credits (10 per image, auto-refunded on failure).
 
 ## Optional: MeltFlex MCP server
 
@@ -62,4 +62,4 @@ See <https://www.meltflexai.com/mcp>.
 | `402 Payment Required` | Out of credits — top up at <https://www.meltflexai.com/settings>. |
 | `429 Too Many Requests` | Back off and retry (1s, 2s, 4s…). |
 | `5xx` | Generation failed; credits are refunded automatically. |
-| API key page is empty | API keys require a Growth plan or higher. |
+| API key page is empty | API keys require an active subscription. |

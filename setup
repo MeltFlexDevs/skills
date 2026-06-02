@@ -27,7 +27,7 @@ fi
 # 3. Auth check
 if [ "${MELTFLEX_API_KEY:-}" = "" ]; then
   warn "MELTFLEX_API_KEY is not set."
-  echo "    Get a key at https://www.meltflexai.com/settings (Growth plan or higher), then:"
+  echo "    Get a key at https://www.meltflexai.com/settings (any active subscription), then:"
   echo "      export MELTFLEX_API_KEY=\"mf_sk_...\""
 else
   ok "MELTFLEX_API_KEY is set (${MELTFLEX_API_KEY:0:9}…)"

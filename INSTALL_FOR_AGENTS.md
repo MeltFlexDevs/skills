@@ -14,7 +14,7 @@ You are setting up the **MeltFlex** skills for interior-design generation. Do th
    ```bash
    echo "${MELTFLEX_API_KEY:-MISSING}"
    ```
-   If it prints `MISSING`, ask me for a `mf_sk_...` key (from https://www.meltflexai.com/settings, Growth plan or higher) and have me export it:
+   If it prints `MISSING`, ask me for a `mf_sk_...` key (from https://www.meltflexai.com/settings, any active subscription) and have me export it:
    ```bash
    export MELTFLEX_API_KEY="mf_sk_..."
    ```

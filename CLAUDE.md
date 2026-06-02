@@ -15,7 +15,7 @@ This registers two skills:
 
 ## Auth
 
-The skills need a MeltFlex API key in `MELTFLEX_API_KEY` (Growth plan or higher — <https://www.meltflexai.com/settings>). If you also use the MeltFlex MCP server (`npx -y meltflex-mcp`), prefer its `generate_interior` and `check_credits` tools — they handle file I/O and authentication for you.
+The skills need a MeltFlex API key in `MELTFLEX_API_KEY` (any active subscription — <https://www.meltflexai.com/settings>). If you also use the MeltFlex MCP server (`npx -y meltflex-mcp`), prefer its `generate_interior` and `check_credits` tools — they handle file I/O and authentication for you.
 
 ## Behavior expected of the agent
 

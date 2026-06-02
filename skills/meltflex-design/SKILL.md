@@ -11,7 +11,7 @@ To place **specific furniture products** into a room, use the companion skill `/
 
 ## Prerequisites
 
-The user needs a MeltFlex API key (`mf_sk_...`), available on a Growth plan or higher at <https://www.meltflexai.com/settings>. Expect it in the `MELTFLEX_API_KEY` environment variable. If missing, ask them to set it:
+The user needs a MeltFlex API key (`mf_sk_...`), available on an active subscription at <https://www.meltflexai.com/settings>. Expect it in the `MELTFLEX_API_KEY` environment variable. If missing, ask them to set it:
 
 ```bash
 export MELTFLEX_API_KEY="mf_sk_..."
