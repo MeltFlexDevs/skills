@@ -1,0 +1,11 @@
+{
+  "name": "meltflex",
+  "version": "0.2.0",
+  "description": "AI interior design — restyle rooms, place furniture, and virtually stage spaces from a photo.",
+  "author": {
+    "name": "MeltFlex",
+    "url": "https://www.meltflexai.com"
+  },
+  "homepage": "https://www.meltflexai.com/mcp",
+  "license": "MIT"
+}

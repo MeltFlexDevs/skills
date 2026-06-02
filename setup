@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# MeltFlex skills — universal setup.
+# Installs the skills for your agent and checks authentication.
+set -euo pipefail
+
+bold() { printf '\033[1m%s\033[0m\n' "$1"; }
+ok()   { printf '  \033[32m✓\033[0m %s\n' "$1"; }
+warn() { printf '  \033[33m!\033[0m %s\n' "$1"; }
+
+bold "MeltFlex skills setup"
+
+# 1. Node check
+if ! command -v node >/dev/null 2>&1; then
+  warn "Node.js not found. Install Node 18+ from https://nodejs.org and re-run ./setup"
+  exit 1
+fi
+ok "Node $(node -v)"
+
+# 2. Install the skills cross-agent
+if command -v npx >/dev/null 2>&1; then
+  bold "Installing skills via npx skills…"
+  npx -y skills add MeltFlexDevs/skills || warn "npx skills failed — try: gh skill install MeltFlexDevs/skills"
+else
+  warn "npx not found; install skills manually (see INSTALL.md)"
+fi
+
+# 3. Auth check
+if [ "${MELTFLEX_API_KEY:-}" = "" ]; then
+  warn "MELTFLEX_API_KEY is not set."
+  echo "    Get a key at https://www.meltflexai.com/settings (Growth plan or higher), then:"
+  echo "      export MELTFLEX_API_KEY=\"mf_sk_...\""
+else
+  ok "MELTFLEX_API_KEY is set (${MELTFLEX_API_KEY:0:9}…)"
+fi
+
+bold "Done."
+echo "Use /meltflex:design or /meltflex:furniture in your agent."
+echo "Docs: https://www.meltflexai.com/mcp"
