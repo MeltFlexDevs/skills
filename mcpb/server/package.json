@@ -1,0 +1,12 @@
+{
+  "name": "meltflex-mcpb-server",
+  "version": "0.2.1",
+  "private": true,
+  "type": "module",
+  "description": "Bundled MeltFlex MCP server for the Claude Desktop Extension (MCPB).",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.23.8"
+  }
+}

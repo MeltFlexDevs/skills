@@ -1,0 +1,53 @@
+{
+  "manifest_version": "0.2",
+  "name": "meltflex",
+  "display_name": "MeltFlex AI",
+  "version": "0.2.1",
+  "description": "AI interior design — restyle rooms, place furniture, and virtually stage spaces from a photo.",
+  "long_description": "MeltFlex AI turns a room photo into a photorealistic interior redesign, directly from Claude. Restyle rooms, place specific furniture, declutter, and virtually stage interiors, exteriors and gardens. Tools: generate_interior and check_credits. Requires a MeltFlex API key (any active subscription); each generation is billed to your own account credits.",
+  "author": {
+    "name": "MeltFlex",
+    "url": "https://github.com/MeltFlexDevs"
+  },
+  "homepage": "https://www.meltflexai.com/mcp",
+  "documentation": "https://www.meltflexai.com/mcp",
+  "license": "MIT",
+  "icon": "icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "server/cli.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/cli.js"],
+      "env": {
+        "MELTFLEX_API_KEY": "${user_config.api_key}"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "generate_interior",
+      "description": "Restyle or redesign a room from a photo and save the result to disk (10 credits)."
+    },
+    {
+      "name": "check_credits",
+      "description": "Show the account's MeltFlex credit balance and per-operation costs."
+    }
+  ],
+  "keywords": ["interior-design", "ai", "image-generation", "real-estate", "virtual-staging"],
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "MeltFlex API Key",
+      "description": "Your mf_sk_ API key from meltflexai.com/settings (requires an active subscription).",
+      "sensitive": true,
+      "required": true
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
+}
