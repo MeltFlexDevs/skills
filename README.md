@@ -5,7 +5,7 @@
 [![Skills](https://img.shields.io/badge/skills-2-8b5cf6.svg)](#skills)
 [![Website](https://img.shields.io/badge/meltflexai.com-f97316.svg)](https://www.meltflexai.com)
 
-AI agent skills for **photorealistic interior design** via MeltFlex AI — restyle rooms, place real furniture, virtually stage, and re-theme spaces from a single photo. Works with Claude Code, Cursor, Codex, and other AI agents that load Markdown-based skills.
+AI agent skills for **photorealistic interior design** via MeltFlex AI — restyle rooms, place real furniture, virtually stage, and re-theme spaces from a single photo. Works with Claude Code, <img src="assets/hermes.png" width="14" align="center" alt="" /> Hermes, Cursor, Codex, and other AI agents that load Markdown-based skills or speak MCP.
 
 Each user authenticates with their **own** MeltFlex API key; every generation is billed to their account credits. The skills call the public [MeltFlex API](https://www.meltflexai.com/api) directly, so there's nothing extra to install.
 
@@ -60,6 +60,27 @@ Then expose it:
 ```bash
 export MELTFLEX_API_KEY="mf_sk_xxxxxxxxxxxx"
 ```
+
+## <img src="assets/hermes.png" width="20" align="center" alt="" /> Use with Hermes
+
+[Hermes](https://hermes-agent.nousresearch.com) (Nous Research) speaks MCP, so it runs MeltFlex through the [`meltflex-mcp`](https://www.meltflexai.com/mcp) server.
+
+**From the catalog** (once merged into the Hermes catalog):
+```bash
+hermes mcp install meltflex
+```
+
+**Manually** — sign in once, then add the server to `~/.hermes/config.yaml`:
+```bash
+npx -y meltflex-mcp auth login
+```
+```yaml
+mcp_servers:
+  meltflex:
+    command: npx
+    args: ["-y", "meltflex-mcp"]
+```
+Start `hermes chat` (or run `/reload-mcp` in a session) to load the `generate_interior` and `check_credits` tools. Full guide: <https://www.meltflexai.com/mcp>.
 
 ## Skills
 
