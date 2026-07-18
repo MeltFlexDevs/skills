@@ -49,7 +49,7 @@ Generations are billed to your own account credits (10 per image, auto-refunded 
 
 ## Optional: MeltFlex MCP server
 
-For agents that prefer tool calls over scripted API calls, install the MCP server, which exposes `generate_interior` and `check_credits`:
+For agents that prefer tool calls over scripted API calls, install the MCP server, which exposes `generate_interior`, `generate_video`, `floorplan_to_3d` and `check_credits`:
 
 ```bash
 npx -y meltflex-mcp auth mf_sk_xxxxxxxxxxxx

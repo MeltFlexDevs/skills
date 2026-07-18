@@ -25,4 +25,4 @@ Do not print or store the API key anywhere except the environment variable.
 
 ---
 
-Prefer the MeltFlex MCP server if available (`npx -y meltflex-mcp`) — use its `generate_interior` and `check_credits` tools instead of raw API calls.
+Prefer the MeltFlex MCP server if available (`npx -y meltflex-mcp`) — use its `generate_interior`, `generate_video`, `floorplan_to_3d` and `check_credits` tools instead of raw API calls.
