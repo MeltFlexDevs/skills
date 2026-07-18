@@ -1,9 +1,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { MeltflexClient } from './api.js';
-import { saveImage } from './util.js';
+import { saveImage, saveBuffer, downloadToFile } from './util.js';
 export function createServer() {
-    const server = new McpServer({ name: 'meltflex', version: '0.1.0' });
+    const server = new McpServer({ name: 'meltflex', version: '0.4.0' });
     server.registerTool('generate_interior', {
         title: 'Generate interior design',
         description: 'Transform a room photo into a redesigned, photorealistic interior using MeltFlex AI. ' +
@@ -52,6 +52,115 @@ export function createServer() {
                     {
                         type: 'text',
                         text: `MeltFlex generation failed: ${err?.message ?? String(err)}`,
+                    },
+                ],
+            };
+        }
+    });
+    server.registerTool('generate_video', {
+        title: 'Generate interior walkthrough video',
+        description: 'Animate a still image (a MeltFlex render or any interior photo) into a short cinematic ' +
+            'walkthrough video using Veo 3.1. Costs 100 MeltFlex credits for a 4-second clip or 150 for ' +
+            '8 seconds. Generation is asynchronous and can take 30–120 seconds. The MP4 is downloaded to ' +
+            'disk and the file path is returned.',
+        inputSchema: {
+            image: z
+                .string()
+                .describe('Source still image: a local file path, an http(s) URL, or a data:image/...;base64,... URL.'),
+            prompt: z
+                .string()
+                .optional()
+                .describe('Optional camera/mood direction, e.g. "Slow dolly forward, then pan left to the window". Defaults to a slow cinematic dolly.'),
+            duration_seconds: z
+                .union([z.literal(4), z.literal(8)])
+                .optional()
+                .describe('Clip length: 4 (100 credits, default) or 8 (150 credits).'),
+            aspect_ratio: z
+                .enum(['16:9', '9:16'])
+                .optional()
+                .describe('"16:9" (default, landscape) or "9:16" (vertical).'),
+            output_path: z
+                .string()
+                .optional()
+                .describe('Where to save the .mp4. Defaults to ./meltflex-output/walkthrough-<timestamp>.mp4 in the current working directory.'),
+        },
+    }, async ({ image, prompt, duration_seconds, aspect_ratio, output_path }) => {
+        try {
+            const client = MeltflexClient.fromConfig();
+            const result = await client.generateVideo({
+                image,
+                prompt,
+                durationSeconds: duration_seconds,
+                aspectRatio: aspect_ratio,
+            });
+            const target = await downloadToFile(result.videoUrl, output_path, 'walkthrough', 'mp4');
+            return {
+                content: [
+                    {
+                        type: 'text',
+                        text: `✅ Walkthrough video (${result.durationSeconds}s, ${result.aspectRatio}) saved to:\n${target}\n\n` +
+                            `Credits used: ${result.creditsUsed}` +
+                            (result.processingTime ? ` • Generated in ${result.processingTime}s` : ''),
+                    },
+                ],
+            };
+        }
+        catch (err) {
+            return {
+                isError: true,
+                content: [
+                    {
+                        type: 'text',
+                        text: `MeltFlex video generation failed: ${err?.message ?? String(err)}`,
+                    },
+                ],
+            };
+        }
+    });
+    server.registerTool('floorplan_to_3d', {
+        title: 'Convert floorplan to 3D model',
+        description: 'Convert a flat 2D floorplan image into a downloadable GLB 3D model. Costs 10 MeltFlex ' +
+            'credits. The .glb is downloaded to disk and the file path is returned. Best results come ' +
+            'from a clean, high-contrast floorplan with clear walls.',
+        inputSchema: {
+            image: z
+                .string()
+                .describe('Source 2D floorplan image (JPEG, PNG or WebP): a local file path, an http(s) URL, or a data:image/...;base64,... URL.'),
+            output_path: z
+                .string()
+                .optional()
+                .describe('Where to save the .glb. Defaults to ./meltflex-output/model-<timestamp>.glb in the current working directory.'),
+        },
+    }, async ({ image, output_path }) => {
+        try {
+            const client = MeltflexClient.fromConfig();
+            const result = await client.floorplanTo3d({ image });
+            let target;
+            if (result.modelUrl) {
+                target = await downloadToFile(result.modelUrl, output_path, 'model', 'glb');
+            }
+            else if (result.model) {
+                target = saveBuffer(Buffer.from(result.model, 'base64'), output_path, 'model', 'glb');
+            }
+            else {
+                throw new Error('No model returned by the API.');
+            }
+            return {
+                content: [
+                    {
+                        type: 'text',
+                        text: `✅ 3D model (${result.format}) saved to:\n${target}\n\nCredits used: ${result.creditsUsed}`,
+                    },
+                ],
+            };
+        }
+        catch (err) {
+            return {
+                isError: true,
+                content: [
+                    {
+                        type: 'text',
+                        text: `MeltFlex floorplan conversion failed: ${err?.message ?? String(err)}`,
                     },
                 ],
             };

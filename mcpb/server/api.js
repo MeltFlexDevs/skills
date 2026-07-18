@@ -70,6 +70,63 @@ export class MeltflexClient {
         }
         return { image: json.image, creditsUsed: json.creditsUsed };
     }
+    /**
+     * Animate a still image into a short cinematic walkthrough (Veo 3.1).
+     * Returns a hosted MP4 URL. Asynchronous on the server — the request can take
+     * 30–120s (up to a 5-minute server cap), so callers should be patient.
+     */
+    async generateVideo(params) {
+        const body = {
+            image: await resolveToDataUrl(params.image),
+        };
+        if (params.prompt)
+            body.prompt = params.prompt;
+        if (params.durationSeconds)
+            body.durationSeconds = params.durationSeconds;
+        if (params.aspectRatio)
+            body.aspectRatio = params.aspectRatio;
+        const res = await fetch(`${this.baseUrl}/api/v1/video`, {
+            method: 'POST',
+            headers: this.headers(),
+            body: JSON.stringify(body),
+        });
+        const json = (await res.json().catch(() => ({})));
+        if (!res.ok || !json?.success) {
+            throw new Error(json?.message ||
+                json?.details ||
+                json?.error ||
+                `Video generation failed (HTTP ${res.status})`);
+        }
+        return {
+            videoUrl: json.videoUrl,
+            durationSeconds: json.durationSeconds,
+            aspectRatio: json.aspectRatio,
+            processingTime: json.processingTime,
+            creditsUsed: json.creditsUsed,
+        };
+    }
+    /** Convert a 2D floorplan image into a downloadable GLB 3D model. */
+    async floorplanTo3d(params) {
+        const body = { image: await resolveToDataUrl(params.image) };
+        const res = await fetch(`${this.baseUrl}/api/v1/floorplan-to-3d`, {
+            method: 'POST',
+            headers: this.headers(),
+            body: JSON.stringify(body),
+        });
+        const json = (await res.json().catch(() => ({})));
+        if (!res.ok || !json?.success) {
+            throw new Error(json?.details ||
+                json?.message ||
+                json?.error ||
+                `Floorplan conversion failed (HTTP ${res.status})`);
+        }
+        return {
+            modelUrl: json.modelUrl,
+            model: json.model,
+            format: json.format ?? 'glb',
+            creditsUsed: json.creditsUsed,
+        };
+    }
     async credits() {
         const res = await fetch(`${this.baseUrl}/api/v1/credits`, {
             headers: this.headers(),

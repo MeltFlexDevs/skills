@@ -4,7 +4,7 @@
   "display_name": "MeltFlex AI",
   "version": "0.2.1",
   "description": "AI interior design — restyle rooms, place furniture, and virtually stage spaces from a photo.",
-  "long_description": "MeltFlex AI turns a room photo into a photorealistic interior redesign, directly from Claude. Restyle rooms, place specific furniture, declutter, and virtually stage interiors, exteriors and gardens. Tools: generate_interior and check_credits. Requires a MeltFlex API key (any active subscription); each generation is billed to your own account credits.",
+  "long_description": "MeltFlex AI turns a room photo into a photorealistic redesign, directly from Claude. Restyle rooms, place specific furniture, swap floors, walls, stairs, doors and windows, redesign kitchens, bathrooms, facades and gardens, and turn 3D drafts into photos. Also animates a still into a cinematic video walkthrough and converts a 2D floorplan into a 3D model. Tools: generate_interior, generate_video, floorplan_to_3d and check_credits. Requires a MeltFlex API key (any active subscription); each generation is billed to your own account credits.",
   "author": {
     "name": "MeltFlex",
     "url": "https://github.com/MeltFlexDevs"
@@ -27,7 +27,15 @@
   "tools": [
     {
       "name": "generate_interior",
-      "description": "Restyle or redesign a room from a photo and save the result to disk (10 credits)."
+      "description": "Restyle or redesign a room from a photo and save the result to disk. Prompt-driven, so it covers the whole suite: interiors, floors, walls, exteriors, kitchens and more (10 credits)."
+    },
+    {
+      "name": "generate_video",
+      "description": "Animate a still into a cinematic walkthrough MP4 with Veo 3.1 (100 credits for 4s, 150 for 8s)."
+    },
+    {
+      "name": "floorplan_to_3d",
+      "description": "Convert a 2D floorplan image into a downloadable GLB 3D model (10 credits)."
     },
     {
       "name": "check_credits",
