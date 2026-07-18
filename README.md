@@ -10,10 +10,14 @@ AI agent skills for **photorealistic interior and exterior design** via MeltFlex
 Each user authenticates with their **own** MeltFlex API key; every generation is billed to their account credits. The skills call the public [MeltFlex API](https://www.meltflexai.com/api) directly, so there's nothing extra to install.
 
 <p align="center">
-  <img src="https://www.meltflexai.com/api-docs/room-empty.webp" width="32%" alt="Input room" />
-  <img src="https://www.meltflexai.com/api-docs/room-result.webp" width="32%" alt="Redesigned room" />
-  <img src="https://www.meltflexai.com/api-docs/restyle-japanese.webp" width="32%" alt="Japanese restyle" />
+  <img src="https://www.meltflexai.com/api-docs/tools/interior.webp" width="90%" alt="Interior design — empty room to a fully furnished, photorealistic redesign" />
+  <br />
+  <img src="https://www.meltflexai.com/api-docs/tools/floor.webp" width="90%" alt="Floor restyle — upload a material and it is applied to your room" />
+  <br />
+  <img src="https://www.meltflexai.com/api-docs/tools/garden.webp" width="90%" alt="Garden design — a plain patio restyled into a Mediterranean garden" />
 </p>
+
+<p align="center"><sub>Interior redesign · floor restyle from a material · garden design — a few of the 15 modes, all from one photo.</sub></p>
 
 ## Install
 
