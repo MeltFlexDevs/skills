@@ -80,7 +80,7 @@ mcp_servers:
     command: npx
     args: ["-y", "meltflex-mcp"]
 ```
-Start `hermes chat` (or run `/reload-mcp` in a session) to load the `generate_interior` and `check_credits` tools. Full guide: <https://www.meltflexai.com/mcp>.
+Start `hermes chat` (or run `/reload-mcp` in a session) to load the `generate_interior`, `generate_video`, `floorplan_to_3d` and `check_credits` tools. Full guide: <https://www.meltflexai.com/mcp>.
 
 ## Skills
 

@@ -1,6 +1,6 @@
 # MeltFlex Skills — Cookbook
 
-Practical recipes. All assume `MELTFLEX_API_KEY` is set and cost 10 credits per generation (auto-refunded on failure).
+Practical recipes. All assume `MELTFLEX_API_KEY` is set. Image generations cost 10 credits each; video costs 100 (4s) or 150 (8s); floorplan→3D costs 10. Credits are auto-refunded on failure.
 
 ## Restyle a room
 
@@ -61,6 +61,29 @@ prompt: "Redesign this house exterior in modern style: white render, dark window
 frames, wood accents. Keep the building structure and rooflines."
 imageUrl: https://cdn.me/facade.jpg
 ```
+
+## Make a walkthrough video
+
+> "Turn this render into a short cinematic walkthrough clip."
+
+`POST /api/v1/video` — 100 credits (4s) or 150 (8s), asynchronous (~30–120s):
+```
+imageUrl: https://cdn.me/render.jpg
+durationSeconds: 4          # or 8
+aspectRatio: "16:9"         # or "9:16"
+prompt: "Slow dolly forward, then pan to the window"   # optional
+```
+Returns `{ videoUrl }` (an MP4). Via the MCP server it's the `generate_video` tool; via the CLI, `meltflex video`.
+
+## Convert a 2D floorplan to a 3D model
+
+> "Turn this floorplan into a downloadable 3D model."
+
+`POST /api/v1/floorplan-to-3d` — 10 credits:
+```
+imageUrl: https://cdn.me/floorplan.png
+```
+Returns `{ modelUrl }` (a GLB, ready for three.js / Blender / Unity). MCP tool `floorplan_to_3d`; CLI `meltflex floorplan`.
 
 ## Batch tips
 
