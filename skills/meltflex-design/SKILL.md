@@ -1,6 +1,6 @@
 ---
 name: meltflex-design
-description: Generate photorealistic interior (and exterior) design redesigns from a photo using MeltFlex AI. Use when the user wants to restyle, redesign, declutter, virtually stage, or re-theme a room, facade, or garden, or visualize a space in a different style, material, or season. Works directly against the MeltFlex REST API — no extra install required.
+description: Generate photorealistic interior and exterior redesigns from a photo using MeltFlex AI. Use when the user wants to restyle, redesign, declutter, virtually stage, or re-theme a room, facade, or garden; swap a floor, wall finish, staircase, doors or windows; redesign a kitchen or bathroom; turn a 3D draft into a photo; or preview a space in a different style, material, or season. Can also produce a cinematic video walkthrough or a 3D model from a 2D floorplan. Works directly against the MeltFlex REST API — no extra install required.
 ---
 
 # MeltFlex — AI Interior Design
@@ -39,12 +39,21 @@ Every mode is the same endpoint with a mode-tuned prompt. Pick the mode that mat
 |------|---------------|----------------|
 | `restyle` | Change a room's style/theme | "Redesign this room in <style>: …" |
 | `virtual_staging` | Furnish an empty room | "Furnish this empty room as a <style> <room type>: …" |
+| `layout_boost` | Rearrange existing furniture | "Rearrange the existing furniture into a more open, functional layout; keep the same pieces" |
 | `declutter` | Clean up / depersonalize | "Declutter and tidy this room, keep the layout, neutral staging" |
 | `exterior` | Building facade / house exterior | "Redesign this house exterior in <style>, keep structure" |
 | `garden` | Landscaping / outdoor | "Redesign this garden: <plants, paving, mood>" |
 | `wall_texture` | Change wall material/finish | "Change the walls to <material/color>, keep everything else" |
 | `floor_restyle` | Change flooring | "Replace the floor with <material>, keep everything else" |
+| `stairs` | Restyle a staircase in place | "Restyle the staircase (<treads, railing>), keep its position and surroundings" |
+| `doors` | Swap interior doors | "Replace the doors with <style>, keep the walls and flooring" |
+| `windows` | Swap window frames/glazing | "Change the windows to <frame/glazing>, keep the wall openings" |
+| `kitchen` | Whole kitchen redesign | "Redesign this kitchen in <style>, keep the footprint and plumbing" |
+| `bathroom` | Whole bathroom redesign | "Redesign this bathroom in <style>, keep the layout and plumbing" |
+| `photo_to_render` | Draft / SketchUp → photo | "Turn this 3D draft into a photorealistic photograph, keep the geometry and camera" |
 | `seasonal` | Lighting / season variation | "Show this room at <time of day / season> with <lighting>" |
+
+For surface- and fixture-swap modes (`wall_texture`, `floor_restyle`, `stairs`, `doors`, `windows`), you can attach the target material or product as a reference image (`referenceImageUrls`) to match it exactly — see `/meltflex:furniture` for the reference mechanic.
 
 Always preserve room structure (walls, windows, doors, flooring) **unless** the mode is explicitly about changing it.
 
@@ -88,6 +97,17 @@ body = {"image": f"data:{mime};base64,{b64}", "prompt": "..."}
 2. **Pick a mode**, then write a **specific** prompt — materials, colors, furniture, lighting, mood. "make it cozy" → "Warm Scandinavian living room: light oak floor, beige linen sofa, cream wool rug, soft diffused daylight."
 3. **Report** the saved path and credits used; offer to iterate.
 4. **Errors**: 402 = insufficient credits (point to /settings); 401 = bad/missing key; 429 = rate limited (retry with backoff); 5xx = failed, credits auto-refunded.
+
+## Beyond still images: video & 3D
+
+The same account and API key unlock two more endpoints. Use them when the request goes past a still redesign:
+
+- **Cinematic video walkthrough** — animate a still (a MeltFlex render or any interior photo) into a short walkthrough clip.
+  `POST /api/v1/video` with `{ imageUrl, durationSeconds: 4|8, aspectRatio: "16:9"|"9:16", prompt? }` → `{ videoUrl }`. Costs **100** credits (4s) or **150** (8s). It is asynchronous; allow up to ~5 minutes.
+- **Floorplan → 3D model** — convert a flat 2D floorplan image into a downloadable GLB.
+  `POST /api/v1/floorplan-to-3d` with `{ imageUrl }` → `{ modelUrl, format: "glb" }`. Costs **10** credits.
+
+Both use the same `Authorization: Bearer $MELTFLEX_API_KEY` header. Full reference: <https://www.meltflexai.com/api>.
 
 ## Tips
 

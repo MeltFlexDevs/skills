@@ -1,11 +1,11 @@
 # MeltFlex AI Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-0.2.0-3b82f6.svg)](./VERSION)
+[![Version](https://img.shields.io/badge/version-0.3.0-3b82f6.svg)](./VERSION)
 [![Skills](https://img.shields.io/badge/skills-2-8b5cf6.svg)](#skills)
 [![Website](https://img.shields.io/badge/meltflexai.com-f97316.svg)](https://www.meltflexai.com)
 
-AI agent skills for **photorealistic interior design** via MeltFlex AI — restyle rooms, place real furniture, virtually stage, and re-theme spaces from a single photo. Works with Claude Code, <img src="assets/hermes.png" width="14" align="center" alt="" /> Hermes, Cursor, Codex, and other AI agents that load Markdown-based skills or speak MCP.
+AI agent skills for **photorealistic interior and exterior design** via MeltFlex AI — restyle rooms, place real furniture, swap floors, walls, stairs, doors and windows, redesign kitchens, bathrooms, facades and gardens, and turn 3D drafts into photos, all from a single photo. Also produces cinematic video walkthroughs and 3D models from 2D floorplans. Works with Claude Code, <img src="assets/hermes.png" width="14" align="center" alt="" /> Hermes, Cursor, Codex, and other AI agents that load Markdown-based skills or speak MCP.
 
 Each user authenticates with their **own** MeltFlex API key; every generation is billed to their account credits. The skills call the public [MeltFlex API](https://www.meltflexai.com/api) directly, so there's nothing extra to install.
 
@@ -86,25 +86,34 @@ Start `hermes chat` (or run `/reload-mcp` in a session) to load the `generate_in
 
 | Skill | Invoke | Description |
 |-------|--------|-------------|
-| meltflex-design | `/meltflex:design` | Restyle, redesign, declutter, virtually stage, or re-theme a room, facade, or garden from a photo. 8 modes (restyle, virtual staging, declutter, exterior, garden, wall texture, floor restyle, seasonal). |
+| meltflex-design | `/meltflex:design` | Restyle a room, facade or garden; swap floors, walls, stairs, doors or windows; redesign a kitchen or bathroom; boost a layout; turn a 3D draft into a photo. 15 prompt-driven modes, plus video walkthroughs and floorplan→3D via the API. |
 | meltflex-furniture | `/meltflex:furniture` | Place specific real furniture/decor products into a room photo, matching their exact colors, materials, and proportions (up to 10 reference items). |
 
 Both skills are self-contained: a room photo in, a photorealistic redesign out, **10 credits** per generation (auto-refunded on failure).
 
 ## Modes
 
-`meltflex-design` — 8 modes, each the same endpoint with a mode-tuned prompt:
+`meltflex-design` — 15 modes, each the same endpoint with a mode-tuned prompt:
 
 | Mode | What it's for |
 |------|---------------|
 | `restyle` | Change a room's style or theme |
 | `virtual_staging` | Furnish an empty room |
+| `layout_boost` | Rearrange existing furniture into a better layout |
 | `declutter` | Clean up / depersonalize a space |
 | `exterior` | Building facade / house exterior |
 | `garden` | Landscaping and outdoor design |
 | `wall_texture` | Change wall material or finish |
 | `floor_restyle` | Change the flooring |
+| `stairs` | Restyle a staircase in place |
+| `doors` | Swap interior doors |
+| `windows` | Swap window frames / glazing |
+| `kitchen` | Whole kitchen redesign |
+| `bathroom` | Whole bathroom redesign |
+| `photo_to_render` | Turn a 3D draft / SketchUp shot into a photo |
 | `seasonal` | Time-of-day / seasonal / lighting variation |
+
+Two more capabilities go beyond stills, using the same API key: a **cinematic video walkthrough** (`POST /api/v1/video`) and a **2D floorplan → 3D model** (`POST /api/v1/floorplan-to-3d`). See the [design skill](./skills/meltflex-design/SKILL.md) and the [API docs](https://www.meltflexai.com/api).
 
 ## Quick Reference
 
@@ -114,7 +123,12 @@ Both skills are self-contained: a room photo in, a photorealistic redesign out, 
 | Furnish an empty room | `meltflex-design` | `virtual_staging` mode |
 | Place a *specific* sofa/bed/table | `meltflex-furniture` | Pass product images as references |
 | Redesign a house exterior or garden | `meltflex-design` | `exterior` / `garden` mode |
-| Swap flooring or wall finish | `meltflex-design` | `floor_restyle` / `wall_texture` |
+| Swap flooring or wall finish | `meltflex-design` | `floor_restyle` / `wall_texture` (attach the material as a reference) |
+| Restyle stairs, doors or windows | `meltflex-design` | `stairs` / `doors` / `windows` mode |
+| Redesign a kitchen or bathroom | `meltflex-design` | `kitchen` / `bathroom` mode |
+| Turn a 3D draft into a photo | `meltflex-design` | `photo_to_render` mode |
+| Cinematic video walkthrough | `meltflex-design` | `POST /api/v1/video` (100–150 credits) |
+| 2D floorplan → 3D model | `meltflex-design` | `POST /api/v1/floorplan-to-3d` (10 credits) |
 | Check credit balance | — | `meltflex credits` (CLI) or the MCP `check_credits` tool |
 
 ## Going further
