@@ -28,8 +28,12 @@ Headers: `Authorization: Bearer $MELTFLEX_API_KEY`, `Content-Type: application/j
 Body:
 - `prompt` (string, required) — the redesign instruction.
 - `imageUrl` (string) **or** `image` (base64 data URL) — the source photo. Prefer `imageUrl`.
+- `resolution` (string, optional) — output quality: `"512"`, `"1K"`, or `"2K"` (sharpest). Defaults to model auto.
+- `designLevel` (string, optional) — `"lite"` (faster & cheaper, −2 credits), `"quick"` (default), or `"pro"` (most detailed, HIGH thinking, +5 credits).
+- `mask` (boolean, optional) — region edit. When `true`, the source image must have the area to change painted **solid red**; the prompt is applied only to those red-marked regions and the rest is preserved. Use for "change only this part".
+- `variations` (number, optional) — batch of `1`–`3` images in one call (default 1). Charged per image; failed variations are refunded.
 
-Response: `{ "success": true, "image": "data:image/png;base64,...", "creditsUsed": 10 }`.
+Response: `{ "success": true, "image": "data:...", "images": ["data:..."], "count": 1, "creditsUsed": 10 }`.
 
 ## Modes
 
@@ -52,6 +56,7 @@ Every mode is the same endpoint with a mode-tuned prompt. Pick the mode that mat
 | `bathroom` | Whole bathroom redesign | "Redesign this bathroom in <style>, keep the layout and plumbing" |
 | `photo_to_render` | Draft / SketchUp → photo | "Turn this 3D draft into a photorealistic photograph, keep the geometry and camera" |
 | `seasonal` | Lighting / season variation | "Show this room at <time of day / season> with <lighting>" |
+| `region_edit` | Change only one marked area | Send `mask: true` with the region painted **solid red** in the image; "Put <thing> in the red area, keep the rest" |
 
 For surface- and fixture-swap modes (`wall_texture`, `floor_restyle`, `stairs`, `doors`, `windows`), you can attach the target material or product as a reference image (`referenceImageUrls`) to match it exactly — see `/meltflex:furniture` for the reference mechanic.
 

@@ -1,16 +1,18 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { MeltflexClient } from './api.js';
-import { saveImage, saveBuffer, downloadToFile } from './util.js';
+import { saveImages, saveBuffer, downloadToFile } from './util.js';
 export function createServer() {
-    const server = new McpServer({ name: 'meltflex', version: '0.4.0' });
+    const server = new McpServer({ name: 'meltflex', version: '0.5.0' });
     server.registerTool('generate_interior', {
         title: 'Generate interior design',
         description: 'Transform a room photo into a redesigned, photorealistic interior using MeltFlex AI. ' +
             'Provide a source room photo (local file path, http(s) URL, or data:image URL) and a prompt ' +
             'describing the desired style or changes. Optionally provide reference furniture/decor images ' +
-            'to place specific products into the room. Costs 10 MeltFlex credits per generation. ' +
-            'The result is saved to disk and the file path is returned.',
+            'to place specific products into the room. Supports output quality (512/1K/2K), a design level ' +
+            '(lite/quick/pro), region editing via a red mask, and batch generation of up to 3 variations. ' +
+            'Costs 10 credits per image (lite −2, pro +5), multiplied by the number of variations. ' +
+            'Each result is saved to disk and the file paths are returned.',
         inputSchema: {
             prompt: z
                 .string()
@@ -22,25 +24,50 @@ export function createServer() {
                 .array(z.string())
                 .optional()
                 .describe('Optional furniture/decor reference images (file paths or URLs) whose exact appearance should be placed into the room.'),
+            resolution: z
+                .enum(['512', '1K', '2K'])
+                .optional()
+                .describe('Output quality / resolution. "512" (fast), "1K", or "2K" (sharpest). Defaults to model auto.'),
+            design_level: z
+                .enum(['lite', 'quick', 'pro'])
+                .optional()
+                .describe('Effort tier: "lite" (faster & cheaper, −2 credits), "quick" (default), or "pro" (most detailed, HIGH thinking, +5 credits).'),
+            mask: z
+                .boolean()
+                .optional()
+                .describe('Region edit. When true, the source image must have the area to change painted SOLID RED; the prompt is applied ONLY to those red-marked regions and everything else is left untouched.'),
+            variations: z
+                .number()
+                .int()
+                .min(1)
+                .max(3)
+                .optional()
+                .describe('Number of variations to generate in one batch: 1–3 (default 1). Credits are charged per image.'),
             output_path: z
                 .string()
                 .optional()
-                .describe('Where to save the result image. Defaults to ./meltflex-output/interior-<timestamp>.<ext> in the current working directory.'),
+                .describe('Where to save the result. Defaults to ./meltflex-output/interior-<timestamp>.<ext>. For a batch, an index (-1, -2, …) is appended so files never collide.'),
         },
-    }, async ({ prompt, image, reference_images, output_path }) => {
+    }, async ({ prompt, image, reference_images, resolution, design_level, mask, variations, output_path }) => {
         try {
             const client = MeltflexClient.fromConfig();
-            const { image: dataUrl, creditsUsed } = await client.generate({
+            const { images, count, creditsUsed } = await client.generate({
                 prompt,
                 image,
                 referenceImages: reference_images,
+                resolution,
+                designLevel: design_level,
+                mask,
+                variations,
             });
-            const target = saveImage(dataUrl, output_path);
+            const targets = saveImages(images, output_path);
             return {
                 content: [
                     {
                         type: 'text',
-                        text: `✅ Interior generated and saved to:\n${target}\n\nCredits used: ${creditsUsed}`,
+                        text: `✅ ${count > 1 ? `${count} interior variations` : 'Interior'} generated and saved to:\n` +
+                            targets.map((t) => `  • ${t}`).join('\n') +
+                            `\n\nCredits used: ${creditsUsed}`,
                     },
                 ],
             };

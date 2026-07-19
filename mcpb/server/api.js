@@ -59,6 +59,14 @@ export class MeltflexClient {
         if (params.referenceProducts?.length) {
             body.referenceProducts = params.referenceProducts;
         }
+        if (params.resolution)
+            body.resolution = params.resolution;
+        if (params.designLevel)
+            body.designLevel = params.designLevel;
+        if (params.mask)
+            body.mask = true;
+        if (params.variations)
+            body.variations = params.variations;
         const res = await fetch(`${this.baseUrl}/api/v1/generate`, {
             method: 'POST',
             headers: this.headers(),
@@ -68,7 +76,13 @@ export class MeltflexClient {
         if (!res.ok || !json?.success) {
             throw new Error(json?.message || json?.error || `Generation failed (HTTP ${res.status})`);
         }
-        return { image: json.image, creditsUsed: json.creditsUsed };
+        const images = Array.isArray(json.images) && json.images.length ? json.images : [json.image];
+        return {
+            image: images[0],
+            images,
+            count: json.count ?? images.length,
+            creditsUsed: json.creditsUsed,
+        };
     }
     /**
      * Animate a still image into a short cinematic walkthrough (Veo 3.1).

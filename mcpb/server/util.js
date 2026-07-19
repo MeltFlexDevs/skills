@@ -38,6 +38,29 @@ export function saveImage(dataUrl, outputPath) {
     writeFileSync(target, buffer);
     return target;
 }
+/**
+ * Save one or more result images. For a single image this behaves exactly like
+ * saveImage. For a batch, an index suffix (-1, -2, …) is inserted so files never
+ * collide — either before the extension of a supplied outputPath, or in the
+ * default timestamped filename. Returns the written paths in order.
+ */
+export function saveImages(images, outputPath) {
+    if (images.length <= 1)
+        return images.map((img) => saveImage(img, outputPath));
+    return images.map((img, i) => {
+        if (outputPath && outputPath.trim()) {
+            const dot = outputPath.lastIndexOf('.');
+            const base = dot > 0 ? outputPath.slice(0, dot) : outputPath;
+            const suffix = dot > 0 ? outputPath.slice(dot) : '';
+            return saveImage(img, `${base}-${i + 1}${suffix}`);
+        }
+        const { buffer, ext } = dataUrlToBuffer(img);
+        const target = join(process.cwd(), 'meltflex-output', `interior-${timestamp()}-${i + 1}.${ext}`);
+        mkdirSync(dirname(target), { recursive: true });
+        writeFileSync(target, buffer);
+        return target;
+    });
+}
 /** Write a buffer to disk, creating parent dirs. Returns the path. */
 export function saveBuffer(buffer, outputPath, prefix, ext) {
     const target = resolveOutputPath(outputPath, ext, prefix);
