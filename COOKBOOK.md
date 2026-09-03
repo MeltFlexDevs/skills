@@ -1,6 +1,6 @@
 # MeltFlex Skills — Cookbook
 
-Practical recipes. All assume `MELTFLEX_API_KEY` is set. Image generations cost 10 credits each; video costs 100 (4s) or 150 (8s); floorplan→3D costs 10. Credits are auto-refunded on failure.
+Practical recipes. All assume `MELTFLEX_API_KEY` is set. Image generations cost 10 credits each; video costs 100 (4s) or 150 (8s); floorplan→3D costs 100. Credits are auto-refunded on failure.
 
 ## Restyle a room
 
@@ -79,7 +79,7 @@ Returns `{ videoUrl }` (an MP4). Via the MCP server it's the `generate_video` to
 
 > "Turn this floorplan into a downloadable 3D model."
 
-`POST /api/v1/floorplan-to-3d` — 10 credits:
+`POST /api/v1/floorplan-to-3d` — 100 credits:
 ```
 imageUrl: https://cdn.me/floorplan.png
 ```

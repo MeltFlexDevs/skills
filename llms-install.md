@@ -31,7 +31,7 @@ Replace `USER_PROVIDED_KEY` with the user's `mf_sk_...` key.
 Once added, the server exposes four tools:
 - `meltflex.generate_interior` — restyle/redesign a room photo, saved to disk (10 credits). Prompt-driven, so it also covers floors, walls, exteriors, kitchens and more.
 - `meltflex.generate_video` — animate a still into a cinematic walkthrough MP4 (100/150 credits).
-- `meltflex.floorplan_to_3d` — convert a 2D floorplan into a GLB 3D model (10 credits).
+- `meltflex.floorplan_to_3d` — convert a 2D floorplan into a GLB 3D model (100 credits).
 - `meltflex.check_credits` — show the account's credit balance.
 
 To confirm it works, call `check_credits` — it should return the balance for the authenticated account.

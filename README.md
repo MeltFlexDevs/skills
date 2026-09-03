@@ -132,7 +132,7 @@ Two more capabilities go beyond stills, using the same API key: a **cinematic vi
 | Redesign a kitchen or bathroom | `meltflex-design` | `kitchen` / `bathroom` mode |
 | Turn a 3D draft into a photo | `meltflex-design` | `photo_to_render` mode |
 | Cinematic video walkthrough | `meltflex-design` | `POST /api/v1/video` (100–150 credits) |
-| 2D floorplan → 3D model | `meltflex-design` | `POST /api/v1/floorplan-to-3d` (10 credits) |
+| 2D floorplan → 3D model | `meltflex-design` | `POST /api/v1/floorplan-to-3d` (100 credits) |
 | Check credit balance | — | `meltflex credits` (CLI) or the MCP `check_credits` tool |
 
 ## Going further

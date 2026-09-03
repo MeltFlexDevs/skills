@@ -146,7 +146,7 @@ export function createServer() {
     });
     server.registerTool('floorplan_to_3d', {
         title: 'Convert floorplan to 3D model',
-        description: 'Convert a flat 2D floorplan image into a downloadable GLB 3D model. Costs 10 MeltFlex ' +
+        description: 'Convert a flat 2D floorplan image into a downloadable GLB 3D model. Costs 100 MeltFlex ' +
             'credits. The .glb is downloaded to disk and the file path is returned. Best results come ' +
             'from a clean, high-contrast floorplan with clear walls.',
         inputSchema: {

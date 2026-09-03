@@ -110,7 +110,7 @@ The same account and API key unlock two more endpoints. Use them when the reques
 - **Cinematic video walkthrough** — animate a still (a MeltFlex render or any interior photo) into a short walkthrough clip.
   `POST /api/v1/video` with `{ imageUrl, durationSeconds: 4|8, aspectRatio: "16:9"|"9:16", prompt? }` → `{ videoUrl }`. Costs **100** credits (4s) or **150** (8s). It is asynchronous; allow up to ~5 minutes.
 - **Floorplan → 3D model** — convert a flat 2D floorplan image into a downloadable GLB.
-  `POST /api/v1/floorplan-to-3d` with `{ imageUrl }` → `{ modelUrl, format: "glb" }`. Costs **10** credits.
+  `POST /api/v1/floorplan-to-3d` with `{ imageUrl }` → `{ modelUrl, format: "glb" }`. Costs **100** credits.
 
 Both use the same `Authorization: Bearer $MELTFLEX_API_KEY` header. Full reference: <https://www.meltflexai.com/api>.
 

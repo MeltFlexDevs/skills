@@ -35,7 +35,7 @@
     },
     {
       "name": "floorplan_to_3d",
-      "description": "Convert a 2D floorplan image into a downloadable GLB 3D model (10 credits)."
+      "description": "Convert a 2D floorplan image into a downloadable GLB 3D model (100 credits)."
     },
     {
       "name": "check_credits",
