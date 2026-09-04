@@ -2,9 +2,9 @@
   "manifest_version": "0.2",
   "name": "meltflex",
   "display_name": "MeltFlex AI",
-  "version": "0.2.1",
-  "description": "AI interior design — restyle rooms, place furniture, and virtually stage spaces from a photo.",
-  "long_description": "MeltFlex AI turns a room photo into a photorealistic redesign, directly from Claude. Restyle rooms, place specific furniture, swap floors, walls, stairs, doors and windows, redesign kitchens, bathrooms, facades and gardens, and turn 3D drafts into photos. Also animates a still into a cinematic video walkthrough and converts a 2D floorplan into a 3D model. Tools: generate_interior, generate_video, floorplan_to_3d and check_credits. Requires a MeltFlex API key (any active subscription); each generation is billed to your own account credits.",
+  "version": "0.6.0",
+  "description": "AI interior design and 3D — restyle rooms, place furniture, stage spaces, and build 3D models and explorable 3D worlds from a photo.",
+  "long_description": "MeltFlex AI turns a room photo into a photorealistic redesign, directly from Claude. Restyle rooms, place specific furniture, swap floors, walls, stairs, doors and windows, redesign kitchens, bathrooms, facades and gardens, and turn 3D drafts into photos — with quality levels, red-region edits and batches of variations. Also animates a still into a cinematic video walkthrough, converts a 2D floorplan into a 3D model, turns one furniture photo into a textured GLB 3D model, and turns a room photo into an explorable 3D world with a hosted viewer link. Tools: generate_interior, generate_video, floorplan_to_3d, furniture_to_3d, generate_world and check_credits. Requires a MeltFlex API key (any active subscription); each generation is billed to your own account credits.",
   "author": {
     "name": "MeltFlex",
     "url": "https://github.com/MeltFlexDevs"
@@ -18,7 +18,9 @@
     "entry_point": "server/cli.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${__dirname}/server/cli.js"],
+      "args": [
+        "${__dirname}/server/cli.js"
+      ],
       "env": {
         "MELTFLEX_API_KEY": "${user_config.api_key}"
       }
@@ -27,7 +29,7 @@
   "tools": [
     {
       "name": "generate_interior",
-      "description": "Restyle or redesign a room from a photo and save the result to disk. Prompt-driven, so it covers the whole suite: interiors, floors, walls, exteriors, kitchens and more (10 credits)."
+      "description": "Restyle or redesign a room from a photo and save the result to disk. Prompt-driven, so it covers the whole suite: interiors, floors, walls, exteriors, kitchens and more (10 credits per image; lite −2, pro +5; up to 3 variations)."
     },
     {
       "name": "generate_video",
@@ -38,11 +40,28 @@
       "description": "Convert a 2D floorplan image into a downloadable GLB 3D model (100 credits)."
     },
     {
+      "name": "furniture_to_3d",
+      "description": "Turn one furniture photo into a textured GLB 3D model plus USDZ/FBX/OBJ links (75 credits, about 2–3 minutes)."
+    },
+    {
+      "name": "generate_world",
+      "description": "Turn a room photo or render into an explorable 3D world: .spz splat saved to disk plus a hosted viewer link (30 credits draft, 200 hd)."
+    },
+    {
       "name": "check_credits",
       "description": "Show the account's MeltFlex credit balance and per-operation costs."
     }
   ],
-  "keywords": ["interior-design", "ai", "image-generation", "real-estate", "virtual-staging"],
+  "keywords": [
+    "interior-design",
+    "ai",
+    "image-generation",
+    "real-estate",
+    "virtual-staging",
+    "3d",
+    "floorplan",
+    "gaussian-splatting"
+  ],
   "user_config": {
     "api_key": {
       "type": "string",
@@ -53,7 +72,11 @@
     }
   },
   "compatibility": {
-    "platforms": ["darwin", "win32", "linux"],
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
     "runtimes": {
       "node": ">=18.0.0"
     }

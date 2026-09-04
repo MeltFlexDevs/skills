@@ -9,18 +9,22 @@ Thanks for helping improve the MeltFlex skills.
   marketplace.json   # plugin + skills manifest (keep in sync with skills/)
   plugin.json        # plugin metadata
 skills/
-  meltflex-design/SKILL.md
-  meltflex-furniture/SKILL.md
-README.md  COOKBOOK.md  CLAUDE.md  INSTALL.md  INSTALL_FOR_AGENTS.md  setup  VERSION
+  meltflex-design/SKILL.md     # 16 image modes + video
+  meltflex-furniture/SKILL.md  # reference-image furniture placement
+  meltflex-3d/SKILL.md         # furniture-3d, floorplan-to-3d, world
+mcpb/                          # Claude Desktop extension bundle (server/*.js copied from meltflex-mcp's dist)
+assets/                        # README images (real API outputs)
+README.md  COOKBOOK.md  CHANGELOG.md  CLAUDE.md  INSTALL.md  INSTALL_FOR_AGENTS.md  llms-install.md  setup  VERSION
 ```
 
 ## Adding or editing a skill
 
 1. Each skill is a folder under `skills/` with a `SKILL.md`.
 2. `SKILL.md` starts with YAML frontmatter — `name` and a precise, trigger-rich `description` (this is what agents match on).
-3. Keep skills **self-contained** and accurate to the public API (`https://www.meltflexai.com/api/v1/generate`). Don't document capabilities the public API doesn't expose.
+3. Keep skills **self-contained** and accurate to the public API (`https://www.meltflexai.com/api` — `/v1/generate`, `/v1/video`, `/v1/floorplan-to-3d`, `/v1/furniture-3d`, `/v1/world`, `/v1/credits`). Don't document capabilities the public API doesn't expose; keep credit prices in sync with the Limits table there.
 4. Register the skill in `.claude-plugin/marketplace.json` (`skills[]` with `name`, `path`, `invoke`).
-5. Bump `version` in `marketplace.json`, `plugin.json`, and `VERSION`.
+5. Bump `version` in `marketplace.json`, `plugin.json`, and `VERSION`, and add a `CHANGELOG.md` entry.
+6. When `meltflex-mcp` ships a new version, refresh `mcpb/server/*.js` from its `dist/` and bump `mcpb/manifest.json` + `mcpb/server/package.json` to match.
 
 ## Principles
 

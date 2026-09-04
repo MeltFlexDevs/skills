@@ -8,8 +8,8 @@
     {
       "name": "meltflex",
       "source": "./",
-      "description": "AI interior design — restyle rooms, place furniture, and virtually stage spaces from a photo.",
-      "version": "0.2.0",
+      "description": "AI interior design and 3D \u2014 restyle rooms, place furniture, virtually stage spaces, and produce video walkthroughs, 3D models and explorable 3D worlds from a photo.",
+      "version": "0.4.0",
       "skills": [
         {
           "name": "design",
@@ -20,6 +20,11 @@
           "name": "furniture",
           "path": "skills/meltflex-furniture/SKILL.md",
           "invoke": "/meltflex:furniture"
+        },
+        {
+          "name": "3d",
+          "path": "skills/meltflex-3d/SKILL.md",
+          "invoke": "/meltflex:3d"
         }
       ]
     }

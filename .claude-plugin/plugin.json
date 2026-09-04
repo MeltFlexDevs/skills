@@ -1,7 +1,7 @@
 {
   "name": "meltflex",
-  "version": "0.2.0",
-  "description": "AI interior design — restyle rooms, place furniture, and virtually stage spaces from a photo.",
+  "version": "0.4.0",
+  "description": "AI interior design and 3D \u2014 restyle rooms, place furniture, virtually stage spaces, and produce video walkthroughs, 3D models and explorable 3D worlds from a photo.",
   "author": {
     "name": "MeltFlex",
     "url": "https://www.meltflexai.com"

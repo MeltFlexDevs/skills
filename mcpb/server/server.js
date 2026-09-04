@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { MeltflexClient } from './api.js';
 import { saveImages, saveBuffer, downloadToFile } from './util.js';
 export function createServer() {
-    const server = new McpServer({ name: 'meltflex', version: '0.5.0' });
+    const server = new McpServer({ name: 'meltflex', version: '0.6.0' });
     server.registerTool('generate_interior', {
         title: 'Generate interior design',
         description: 'Transform a room photo into a redesigned, photorealistic interior using MeltFlex AI. ' +
@@ -188,6 +188,114 @@ export function createServer() {
                     {
                         type: 'text',
                         text: `MeltFlex floorplan conversion failed: ${err?.message ?? String(err)}`,
+                    },
+                ],
+            };
+        }
+    });
+    server.registerTool('furniture_to_3d', {
+        title: 'Convert a furniture photo to a 3D model',
+        description: 'Turn ONE photo of a furniture piece (sofa, chair, table, lamp…) into a textured, downloadable ' +
+            'GLB 3D model. Costs 75 MeltFlex credits (refunded if the build fails). Takes about 2–3 minutes; ' +
+            'this tool waits for the model. Best input: one piece, front three-quarter view, plain or white ' +
+            'background, nothing cropped. The .glb is downloaded to disk and the file path is returned, along ' +
+            'with signed USDZ/FBX/OBJ links (valid ~72 h).',
+        inputSchema: {
+            image: z
+                .string()
+                .describe('Photo of ONE furniture piece: a local file path, an http(s) URL, or a data:image/...;base64,... URL.'),
+            textured: z
+                .boolean()
+                .optional()
+                .describe('Default true (baked PBR textures). false → bare geometry only: faster, smaller, same price.'),
+            output_path: z
+                .string()
+                .optional()
+                .describe('Where to save the .glb. Defaults to ./meltflex-output/furniture-<timestamp>.glb in the current working directory.'),
+        },
+    }, async ({ image, textured, output_path }) => {
+        try {
+            const client = MeltflexClient.fromConfig();
+            const result = await client.furnitureTo3d({ image, textured });
+            const target = await downloadToFile(result.modelUrl, output_path, 'furniture', 'glb');
+            const extra = [
+                result.formats.usdz ? `USDZ (signed, ~72 h): ${result.formats.usdz}` : '',
+                result.formats.fbx ? `FBX (signed, ~72 h): ${result.formats.fbx}` : '',
+                result.formats.obj ? `OBJ (signed, ~72 h): ${result.formats.obj}` : '',
+                result.thumbnailUrl ? `Thumbnail: ${result.thumbnailUrl}` : '',
+            ].filter(Boolean);
+            return {
+                content: [
+                    {
+                        type: 'text',
+                        text: `✅ 3D furniture model (glb${result.textured === false ? ', untextured' : ''}) saved to:\n${target}\n` +
+                            `Hosted URL: ${result.modelUrl}\n` +
+                            (extra.length ? extra.join('\n') + '\n' : '') +
+                            `\nCredits used: ${result.creditsUsed}`,
+                    },
+                ],
+            };
+        }
+        catch (err) {
+            return {
+                isError: true,
+                content: [
+                    {
+                        type: 'text',
+                        text: `MeltFlex 3D furniture model failed: ${err?.message ?? String(err)}`,
+                    },
+                ],
+            };
+        }
+    });
+    server.registerTool('generate_world', {
+        title: 'Generate an explorable 3D world from a room photo',
+        description: 'Turn ONE interior photo or render (e.g. a generate_interior result) into an explorable 3D world ' +
+            '(Gaussian splats) you can look around and walk through from the camera\'s viewpoint. ' +
+            'Costs 30 MeltFlex credits for a "draft" world (~1 min) or 200 for "hd" (~5 min, sharper up close); ' +
+            'refunded if the build fails. This tool waits for the world. Returns the worldId (permanent), a ' +
+            'hosted viewer link, and the .spz splat file downloaded to disk. The .spz links expire after a few ' +
+            'days — keep the worldId.',
+        inputSchema: {
+            image: z
+                .string()
+                .describe('Room photo or render: a local file path, an http(s) URL, or a data:image/...;base64,... URL.'),
+            model: z
+                .enum(['draft', 'hd'])
+                .optional()
+                .describe('"draft" (30 credits, ~1 min, default) or "hd" (200 credits, ~5 min).'),
+            name: z.string().max(64).optional().describe('Optional label for the world.'),
+            output_path: z
+                .string()
+                .optional()
+                .describe('Where to save the .spz splat file. Defaults to ./meltflex-output/world-<timestamp>.spz in the current working directory.'),
+        },
+    }, async ({ image, model, name, output_path }) => {
+        try {
+            const client = MeltflexClient.fromConfig();
+            const result = await client.generateWorld({ image, model, name });
+            const target = await downloadToFile(result.spzUrl, output_path, 'world', 'spz');
+            return {
+                content: [
+                    {
+                        type: 'text',
+                        text: `✅ 3D world ready (${result.model ?? 'draft'}).\n` +
+                            `World id: ${result.worldId}  (permanent — use it to fetch fresh links)\n` +
+                            (result.viewerUrl ? `Open in a browser: ${result.viewerUrl}\n` : '') +
+                            `Splat (.spz) saved to: ${target}\n` +
+                            (result.caption ? `Caption: ${result.caption}\n` : '') +
+                            `\nCredits used: ${result.creditsUsed}`,
+                    },
+                ],
+            };
+        }
+        catch (err) {
+            return {
+                isError: true,
+                content: [
+                    {
+                        type: 'text',
+                        text: `MeltFlex 3D world generation failed: ${err?.message ?? String(err)}`,
                     },
                 ],
             };

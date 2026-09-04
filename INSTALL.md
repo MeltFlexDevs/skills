@@ -45,25 +45,32 @@ All methods need a MeltFlex API key. You need an **active subscription** (any pa
    export MELTFLEX_API_KEY="mf_sk_xxxxxxxxxxxx"
    ```
 
-Generations are billed to your own account credits (10 per image, auto-refunded on failure).
+Or, if you use the MCP server / CLI, sign in from the browser instead of copying a key:
+
+```bash
+npx -y meltflex-mcp auth login     # opens meltflexai.com/cli/authorize, stores the key in ~/.meltflex/config.json
+```
+
+Generations are billed to your own account credits (10 per image; video 100/150; floorplan 3D picture 10 / GLB 100; furniture → 3D 75; 3D world 30/200 — all auto-refunded on failure).
 
 ## Optional: MeltFlex MCP server
 
-For agents that prefer tool calls over scripted API calls, install the MCP server, which exposes `generate_interior`, `generate_video`, `floorplan_to_3d` and `check_credits`:
+For agents that prefer tool calls over scripted API calls, install the MCP server. It exposes six tools — `generate_interior`, `generate_video`, `floorplan_to_3d`, `furniture_to_3d`, `generate_world` and `check_credits` — and handles polling and saving files:
 
 ```bash
-npx -y meltflex-mcp auth mf_sk_xxxxxxxxxxxx
+npx -y meltflex-mcp auth login                 # or: npx -y meltflex-mcp auth mf_sk_xxxxxxxxxxxx
 # Claude Code:
 claude mcp add meltflex -- npx -y meltflex-mcp
 ```
 
-See <https://www.meltflexai.com/mcp>.
+Cursor / Codex / Cline / Hermes use the same `command: npx`, `args: ["-y", "meltflex-mcp"]` shape — see [llms-install.md](./llms-install.md) and <https://www.meltflexai.com/mcp>. Claude Desktop users can install the extension bundle from [`mcpb/`](./mcpb).
 
 ## Use
 
 ```
-/meltflex:design       # restyle / redesign / stage a space
+/meltflex:design       # restyle / redesign / stage a space (16 modes) + video walkthroughs
 /meltflex:furniture    # place specific furniture into a room
+/meltflex:3d           # furniture → 3D model, floorplan → 3D model / picture, photo → 3D world
 ```
 
 ## Troubleshooting
@@ -72,6 +79,8 @@ See <https://www.meltflexai.com/mcp>.
 |---------|-------------|
 | `401 Unauthorized` | Key missing/wrong/revoked — re-check `MELTFLEX_API_KEY`. |
 | `402 Payment Required` | Out of credits — top up at <https://www.meltflexai.com/settings>. |
+| `400 Bad Request` with `validValues` | An option value is not one of the allowed ones — use one from the list. |
 | `429 Too Many Requests` | Back off and retry (1s, 2s, 4s…). |
-| `5xx` | Generation failed; credits are refunded automatically. |
+| `202 Accepted` | A 3D build is still running — `GET` the `pollUrl` every 5–10 s; do not re-POST. |
+| `5xx` / job `FAILED` | Generation failed; credits are refunded automatically. |
 | API key page is empty | API keys require an active subscription. |

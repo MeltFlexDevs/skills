@@ -7,7 +7,7 @@ description: Place specific real furniture or decor products into a room photo u
 
 This skill places **specific products** into a room photo: you provide the room plus one or more reference images of the exact furniture/decor, and MeltFlex composes them into the scene with correct perspective, lighting, and shadows. Same MeltFlex REST API, no extra install.
 
-For general restyling without specific products, use `/meltflex:design`.
+For general restyling without specific products, use `/meltflex:design`. To turn a photo of a furniture piece into a downloadable **3D model** (GLB), use `/meltflex:3d` (`POST /api/v1/furniture-3d`, 75 credits).
 
 ## Prerequisites
 
@@ -22,8 +22,9 @@ Body:
 - `imageUrl` **or** `image` — the room photo.
 - `referenceImageUrls` (string[]) — up to **10** public URLs of the products to place. (Or `referenceImages` as base64 data URLs for local files.)
 - `referenceProducts` (object[], optional) — metadata per reference, e.g. `[{"name": "Modular Sofa"}]`, to help placement.
+- `resolution` (`"512"|"1K"|"2K"`), `designLevel` (`"lite"|"quick"|"pro"`), `variations` (1–3) — the same optional quality/batch fields as `/meltflex:design`.
 
-Response: `{ "success": true, "image": "data:image/png;base64,...", "creditsUsed": 10 }`.
+Response: `{ "success": true, "image": "data:image/png;base64,...", "images": ["data:..."], "count": 1, "creditsUsed": 10 }`.
 
 ## Example
 

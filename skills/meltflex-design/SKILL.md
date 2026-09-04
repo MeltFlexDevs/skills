@@ -1,13 +1,13 @@
 ---
 name: meltflex-design
-description: Generate photorealistic interior and exterior redesigns from a photo using MeltFlex AI. Use when the user wants to restyle, redesign, declutter, virtually stage, or re-theme a room, facade, or garden; swap a floor, wall finish, staircase, doors or windows; redesign a kitchen or bathroom; turn a 3D draft into a photo; or preview a space in a different style, material, or season. Can also produce a cinematic video walkthrough or a 3D model from a 2D floorplan. Works directly against the MeltFlex REST API — no extra install required.
+description: Generate photorealistic interior and exterior redesigns from a photo using MeltFlex AI. Use when the user wants to restyle, redesign, declutter, virtually stage, or re-theme a room, facade, or garden; swap a floor, wall finish, staircase, doors or windows; redesign a kitchen or bathroom; turn a 3D draft into a photo; or preview a space in a different style, material, or season. Can also produce a cinematic video walkthrough; for 3D models and 3D worlds see the companion skill meltflex-3d. Works directly against the MeltFlex REST API — no extra install required.
 ---
 
 # MeltFlex — AI Interior Design
 
 MeltFlex turns a real photo of a space into a redesigned, photorealistic result. This skill calls the MeltFlex REST API directly, so it works in any agent without installing anything else. (If the `meltflex-mcp` server is configured, prefer its `generate_interior` tool — it handles file I/O for you.)
 
-To place **specific furniture products** into a room, use the companion skill `/meltflex:furniture`.
+To place **specific furniture products** into a room, use the companion skill `/meltflex:furniture`. For 3D output (a furniture GLB, a floorplan model, an explorable 3D world), use `/meltflex:3d`.
 
 ## Prerequisites
 
@@ -105,14 +105,15 @@ body = {"image": f"data:{mime};base64,{b64}", "prompt": "..."}
 
 ## Beyond still images: video & 3D
 
-The same account and API key unlock two more endpoints. Use them when the request goes past a still redesign:
+The same account and API key unlock more endpoints. Use them when the request goes past a still redesign:
 
-- **Cinematic video walkthrough** — animate a still (a MeltFlex render or any interior photo) into a short walkthrough clip.
-  `POST /api/v1/video` with `{ imageUrl, durationSeconds: 4|8, aspectRatio: "16:9"|"9:16", prompt? }` → `{ videoUrl }`. Costs **100** credits (4s) or **150** (8s). It is asynchronous; allow up to ~5 minutes.
-- **Floorplan → 3D model** — convert a flat 2D floorplan image into a downloadable GLB.
-  `POST /api/v1/floorplan-to-3d` with `{ imageUrl }` → `{ modelUrl, format: "glb" }`. Costs **100** credits.
+- **Cinematic video walkthrough** — animate a still (a MeltFlex render or any interior photo) into a short walkthrough clip (Veo 3.1).
+  `POST /api/v1/video` with `{ imageUrl, durationSeconds: 4|8, aspectRatio: "16:9"|"9:16", prompt? }` → `{ videoUrl, durationSeconds, aspectRatio, creditsUsed }` (a hosted MP4). Costs **100** credits (4s) or **150** (8s). Allow up to ~5 minutes.
+- **Floorplan → 3D** — a 2D plan into a rendered 3D picture (`output: "render"`, **10** credits, ~20 s) or a downloadable GLB model (`output: "model"`, **100** credits, ~3 min). `POST /api/v1/floorplan-to-3d`.
+- **Furniture photo → 3D model** — one product photo into a textured GLB (plus USDZ/FBX/OBJ links). `POST /api/v1/furniture-3d`, **75** credits, ~2–3 min.
+- **Photo → explorable 3D world** — a room photo or one of your renders into a walkable Gaussian-splat world with a hosted viewer link. `POST /api/v1/world`, **30** credits (`draft`) or **200** (`hd`).
 
-Both use the same `Authorization: Bearer $MELTFLEX_API_KEY` header. Full reference: <https://www.meltflexai.com/api>.
+The three 3D endpoints can answer HTTP 202 and need polling; the companion skill `/meltflex:3d` documents all of them with request/response shapes and a polling helper. Full reference: <https://www.meltflexai.com/api>.
 
 ## Tips
 

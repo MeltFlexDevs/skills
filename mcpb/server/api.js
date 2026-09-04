@@ -30,6 +30,7 @@ async function resolveToDataUrl(input) {
     const buf = readFileSync(input); // throws a clear ENOENT if the path is wrong
     return `data:${mime};base64,${buf.toString('base64')}`;
 }
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 export class MeltflexClient {
     apiKey;
     baseUrl;
@@ -139,6 +140,96 @@ export class MeltflexClient {
             model: json.model,
             format: json.format ?? 'glb',
             creditsUsed: json.creditsUsed,
+        };
+    }
+    /**
+     * One furniture photo → a textured GLB 3D model (75 credits). The server waits
+     * for the mesh (~2–3 min) and answers 202 + taskId if the build outlives its
+     * budget; this client keeps polling until the model is ready.
+     */
+    async furnitureTo3d(params, onProgress) {
+        const body = { image: await resolveToDataUrl(params.image) };
+        if (params.textured === false)
+            body.textured = false;
+        const url = `${this.baseUrl}/api/v1/furniture-3d`;
+        let res = await fetch(url, { method: 'POST', headers: this.headers(), body: JSON.stringify(body) });
+        let json = (await res.json().catch(() => ({})));
+        if (!res.ok && res.status !== 202) {
+            throw new Error(json?.details || json?.message || json?.error || `3D model generation failed (HTTP ${res.status})`);
+        }
+        while (json?.status === 'PENDING' || json?.status === 'IN_PROGRESS') {
+            if (!json.taskId)
+                throw new Error('The API returned no taskId to poll.');
+            if (typeof json.progress === 'number')
+                onProgress?.(json.progress);
+            await sleep(8000);
+            res = await fetch(`${url}?taskId=${encodeURIComponent(json.taskId)}`, { headers: this.headers() });
+            json = (await res.json().catch(() => ({})));
+            if (!res.ok)
+                throw new Error(json?.error || `3D model poll failed (HTTP ${res.status})`);
+        }
+        if (!json?.success || !json?.modelUrl) {
+            throw new Error(json?.error || '3D model generation failed');
+        }
+        return {
+            taskId: json.taskId,
+            modelUrl: json.modelUrl,
+            thumbnailUrl: json.thumbnailUrl,
+            formats: json.formats ?? {},
+            format: json.format ?? 'glb',
+            textured: json.textured,
+            creditsUsed: json.creditsUsed,
+        };
+    }
+    /**
+     * One room photo/render → an explorable 3D world (Gaussian splats). Draft
+     * 30 credits (~1 min), hd 200 credits (~5 min). Polls until the world is ready.
+     */
+    async generateWorld(params) {
+        const body = { image: await resolveToDataUrl(params.image) };
+        if (params.model)
+            body.model = params.model;
+        if (params.name)
+            body.name = params.name;
+        const url = `${this.baseUrl}/api/v1/world`;
+        let res = await fetch(url, { method: 'POST', headers: this.headers(), body: JSON.stringify(body) });
+        let json = (await res.json().catch(() => ({})));
+        if (!res.ok && res.status !== 202) {
+            throw new Error(json?.details || json?.message || json?.error || `3D world generation failed (HTTP ${res.status})`);
+        }
+        while (json?.done === false) {
+            if (!json.operationId)
+                throw new Error('The API returned no operationId to poll.');
+            await sleep(8000);
+            res = await fetch(`${url}?operationId=${encodeURIComponent(json.operationId)}`, { headers: this.headers() });
+            json = (await res.json().catch(() => ({})));
+            if (!res.ok)
+                throw new Error(json?.error || `3D world poll failed (HTTP ${res.status})`);
+        }
+        if (!json?.success || !json?.worldId) {
+            throw new Error(json?.error || '3D world generation failed');
+        }
+        return this.worldFromJson(json);
+    }
+    /** Fresh signed asset links for a world built earlier (free). */
+    async worldAssets(worldId) {
+        const res = await fetch(`${this.baseUrl}/api/v1/world?worldId=${encodeURIComponent(worldId)}`, { headers: this.headers() });
+        const json = (await res.json().catch(() => ({})));
+        if (!res.ok || !json?.worldId)
+            throw new Error(json?.error || `World lookup failed (HTTP ${res.status})`);
+        return this.worldFromJson(json);
+    }
+    worldFromJson(json) {
+        return {
+            worldId: json.worldId,
+            spzUrl: json.spzUrl,
+            spzUrls: json.spzUrls,
+            thumbnailUrl: json.thumbnailUrl,
+            caption: json.caption,
+            viewerUrl: json.viewerUrl,
+            model: json.model,
+            operationId: json.operationId,
+            creditsUsed: json.creditsUsed ?? 0,
         };
     }
     async credits() {
