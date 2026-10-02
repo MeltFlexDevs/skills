@@ -7,6 +7,8 @@ description: Put the MeltFlex AI design tool on the user's own website as an ifr
 
 A website embed is one `<iframe>` that puts a MeltFlex design tool on the user's own site, with their logo, colour and language. Visitors upload a photo of their room and get a design on that page. They need no account; each design costs the site owner **10 credits**.
 
+![The MeltFlex embed live on the Kondela furniture shop](https://www.meltflexai.com/embed-landing/step-3-live-kondela.webp)
+
 This is not the REST API: there is no API key and nothing to call. The user builds the embed once in the browser, and your job is to put the code in the right place and check that it loads.
 
 | Embed for | What visitors do |

@@ -150,6 +150,12 @@ Full reference with response bodies and three.js / Spark loader snippets: <https
 
 ## Embed on your website
 
+<p align="center">
+  <img src="https://www.meltflexai.com/embed-landing/step-3-live-kondela.webp" width="90%" alt="The MeltFlex embed live on the Kondela furniture shop: a room photo on the left, the shop's own products with prices on the right" />
+</p>
+
+<p align="center"><sub>Live on the Kondela furniture shop: shoppers place its own products in a photo of their room, on the shop's own page.</sub></p>
+
 No API key and no backend: build an embed in the [Website Embed Builder](https://www.meltflexai.com/embed-builder) (your domain, logo, colour, language, and for shops your product feed), then paste one iframe. Visitors design their room on your page without an account; each design uses 10 credits from your account. The code unlocks on an [Enterprise plan](https://www.meltflexai.com/enterprise).
 
 ```html
