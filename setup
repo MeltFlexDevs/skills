@@ -34,5 +34,5 @@ else
 fi
 
 bold "Done."
-echo "Use /meltflex:design, /meltflex:furniture or /meltflex:3d in your agent."
+echo "Use /meltflex:design, /meltflex:furniture, /meltflex:3d or /meltflex:embed in your agent."
 echo "Docs: https://www.meltflexai.com/mcp"

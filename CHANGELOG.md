@@ -2,6 +2,12 @@
 
 All notable changes to the MeltFlex skills repo. The bundled MCP server (`mcpb/`) tracks the [`meltflex-mcp`](https://www.npmjs.com/package/meltflex-mcp) npm package.
 
+## 0.5.0 — 2026-10-02
+
+### Added
+- **New skill `/meltflex:embed`** (`skills/meltflex-embed/SKILL.md`): put the MeltFlex design tool on your own website as an iframe (`https://widget.meltflexai.com/<embed id>`). Covers the builder steps (tool, website, brand, products, code), the code for plain HTML, React / Next.js and Vue, where to paste it in WordPress, Shopify and Webflow, `?product=` for shop product pages, a `curl` check of the embed's allowed domains, and a troubleshooting table (domain lock, the site's own Content Security Policy, "not available", limits). No API key.
+- README section "Embed on your website".
+
 ## 0.4.0 — 2026-09-04
 
 ### Added

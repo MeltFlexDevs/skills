@@ -71,6 +71,7 @@ Cursor / Codex / Cline / Hermes use the same `command: npx`, `args: ["-y", "melt
 /meltflex:design       # restyle / redesign / stage a space (16 modes) + video walkthroughs
 /meltflex:furniture    # place specific furniture into a room
 /meltflex:3d           # furniture → 3D model, floorplan → 3D model / picture, photo → 3D world
+/meltflex:embed        # put the design tool on your own website (iframe, no API key)
 ```
 
 ## Troubleshooting

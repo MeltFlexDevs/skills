@@ -9,10 +9,11 @@ This repo is a Claude Code plugin marketplace. Manifest: `.claude-plugin/marketp
 /plugin install meltflex@meltflex
 ```
 
-This registers three skills:
+This registers four skills:
 - `/meltflex:design` — restyle / redesign / stage a space from a photo (16 modes, quality levels, region edits, batches) and cinematic video walkthroughs
 - `/meltflex:furniture` — place specific furniture products into a room
 - `/meltflex:3d` — a furniture photo → GLB model, a 2D floorplan → GLB model or rendered 3D picture, a room photo → explorable 3D world
+- `/meltflex:embed` — put the design tool on the user's own website as an iframe (no API key; the user creates the embed at <https://www.meltflexai.com/embed-builder>)
 
 ## Auth
 

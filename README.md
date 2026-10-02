@@ -1,8 +1,8 @@
 # MeltFlex AI Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-0.4.0-3b82f6.svg)](./VERSION)
-[![Skills](https://img.shields.io/badge/skills-3-8b5cf6.svg)](#skills)
+[![Version](https://img.shields.io/badge/version-0.5.0-3b82f6.svg)](./VERSION)
+[![Skills](https://img.shields.io/badge/skills-4-8b5cf6.svg)](#skills)
 [![MCP tools](https://img.shields.io/badge/MCP_tools-6-0ea5e9.svg)](#use-with-the-mcp-server)
 [![Website](https://img.shields.io/badge/meltflexai.com-f97316.svg)](https://www.meltflexai.com)
 
@@ -85,6 +85,7 @@ If you use the MCP server / CLI, you can skip the copy-paste and sign in from th
 | meltflex-design | `/meltflex:design` | Restyle a room, facade or garden; swap floors, walls, stairs, doors or windows; redesign a kitchen or bathroom; boost a layout; turn a 3D draft into a photo. 16 prompt-driven modes with quality levels, region editing and batches, plus video walkthroughs via the API. |
 | meltflex-furniture | `/meltflex:furniture` | Place specific real furniture/decor products into a room photo, matching their exact colors, materials, and proportions (up to 10 reference items). |
 | meltflex-3d | `/meltflex:3d` | 3D output: a furniture photo → GLB model, a 2D floorplan → GLB model or rendered 3D picture, a room photo → explorable 3D world (splat + hosted viewer). Handles the long-build polling. |
+| meltflex-embed | `/meltflex:embed` | Put the design tool on your own website as an iframe: visitors design their room, or place your shop's products in it, without an account. Installs the code in HTML, React, Vue, Shopify or WordPress and fixes a blank frame. No API key. |
 
 Image skills are self-contained: a room photo in, a photorealistic redesign out, **10 credits** per image (auto-refunded on failure).
 
@@ -146,6 +147,24 @@ Full reference with response bodies and three.js / Spark loader snippets: <https
 | 2D floorplan → 3D model / 3D picture | `meltflex-3d` | `POST /api/v1/floorplan-to-3d` (100 / 10 credits) |
 | Walk through a room in 3D | `meltflex-3d` | `POST /api/v1/world` (30 draft / 200 hd) |
 | Check credit balance | — | `meltflex credits` (CLI) or the MCP `check_credits` tool |
+
+## Embed on your website
+
+No API key and no backend: build an embed in the [Website Embed Builder](https://www.meltflexai.com/embed-builder) (your domain, logo, colour, language, and for shops your product feed), then paste one iframe. Visitors design their room on your page without an account; each design uses 10 credits from your account. The code unlocks on an [Enterprise plan](https://www.meltflexai.com/enterprise).
+
+```html
+<iframe
+  src="https://widget.meltflexai.com/YOUR_EMBED_ID"
+  title="AI Interior Design by MeltFlex"
+  width="100%"
+  height="720"
+  style="border:0;border-radius:12px;max-width:100%;"
+  allow="clipboard-write"
+  loading="lazy"
+></iframe>
+```
+
+On a shop's product page, add `?product=<product page address>` and the tool opens with that product. `/meltflex:embed` installs the code in your project (HTML, React / Next.js, Vue, Shopify, WordPress), sets the `frame-src` rule if your site has a Content Security Policy, and walks through a blank frame. Guide: <https://www.meltflexai.com/api#embed>.
 
 ## Use with the MCP server
 

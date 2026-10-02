@@ -12,6 +12,7 @@ skills/
   meltflex-design/SKILL.md     # 16 image modes + video
   meltflex-furniture/SKILL.md  # reference-image furniture placement
   meltflex-3d/SKILL.md         # furniture-3d, floorplan-to-3d, world
+  meltflex-embed/SKILL.md      # website embed (iframe), no API key
 mcpb/                          # Claude Desktop extension bundle (server/*.js copied from meltflex-mcp's dist)
 assets/                        # README images (real API outputs)
 README.md  COOKBOOK.md  CHANGELOG.md  CLAUDE.md  INSTALL.md  INSTALL_FOR_AGENTS.md  llms-install.md  setup  VERSION
