@@ -9,7 +9,7 @@ A website embed is one `<iframe>` that puts a MeltFlex design tool on the user's
 
 ![The MeltFlex embed live on the Kondela furniture shop](https://www.meltflexai.com/embed-landing/step-3-live-kondela.webp)
 
-This is not the REST API: there is no API key and nothing to call. The user builds the embed once in the browser, and your job is to put the code in the right place and check that it loads.
+Usually the user builds the embed once in the browser, and your job is to put the code in the right place and check that it loads. If they have an API key (any paid plan) you can also build it for them and load their products: see section 1b.
 
 | Embed for | What visitors do |
 |-----------|------------------|
@@ -18,7 +18,7 @@ This is not the REST API: there is no API key and nothing to call. The user buil
 
 To generate designs from code instead (your own UI, batch jobs), use `/meltflex:design` and `/meltflex:furniture`.
 
-## 1. The user creates the embed (you cannot do this step)
+## 1. The user creates the embed in the builder
 
 Send the user to <https://www.meltflexai.com/embed-builder> → **New embed**. The steps:
 
@@ -29,6 +29,34 @@ Send the user to <https://www.meltflexai.com/embed-builder> → **New embed**. T
 5. **Code**: **Copy code**.
 
 Building and previewing is free with any account. The code unlocks on an Enterprise plan (<https://www.meltflexai.com/enterprise>). Ask the user to paste the copied code, or just the `https://widget.meltflexai.com/...` address in it. Never invent an embed ID.
+
+## 1b. Or build it over the API (API key)
+
+When the user has many products and no feed, or wants you to do the setup, use `https://www.meltflexai.com/api/v1/embeds` with `Authorization: Bearer mf_sk_...`. Same fields as the builder:
+
+```bash
+curl -X POST https://www.meltflexai.com/api/v1/embeds \
+  -H "Authorization: Bearer $MELTFLEX_API_KEY" -H "Content-Type: application/json" \
+  -d '{
+    "tool": "retailer",
+    "allowedDomains": ["yourshop.com"],
+    "language": "en",
+    "accentColor": "#1f2937",
+    "logoUrl": "https://yourshop.com/logo.png",
+    "productFeedUrl": "https://yourshop.com/feed.xml",
+    "manualProducts": [
+      { "name": "Oak sofa", "price": 1299, "currency": "EUR",
+        "link": "https://yourshop.com/products/oak-sofa",
+        "image": "https://yourshop.com/img/oak-sofa.jpg", "category": "Sofas" }
+    ]
+  }'
+```
+
+- `GET` lists embeds; `PATCH` with `id` + fields changes one (`manualProducts` replaces the whole list; `enabled: false` pauses); `DELETE` with `id`.
+- `tool`: `retailer`, `interior`, `staging`, `kitchen`. `language`: `en`, `es`, `de`, `fr`, `pt`. Up to 10 domains, up to 60 `manualProducts` (use a feed for more).
+- Images may be any public https URL; MeltFlex keeps a copy. An unreadable image or feed returns `422` with the reason: fix it and retry.
+- To collect products from the shop's pages, read each product page for name, price, currency, link and the main photo URL. Never invent prices or photos.
+- `link.token` is the embed ID for `https://widget.meltflexai.com/<token>`. It is `null` with `locked: true` until the account has Enterprise; then send the user to the builder to see it and upgrade.
 
 ## 2. Put the code on the site
 
