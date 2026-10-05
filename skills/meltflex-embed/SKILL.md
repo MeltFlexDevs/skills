@@ -25,7 +25,7 @@ Send the user to <https://www.meltflexai.com/embed-builder> → **New embed**. T
 1. **Tool**: furniture shop, design studio or real estate.
 2. **Website**: the domain(s) the tool may load on, e.g. `yourshop.com` (subdomains included, up to 10). For local development they must also add `localhost`.
 3. **Brand**: logo and button colour (read from their site, editable) and the language: English, Spanish, German, French or Portuguese.
-4. **Products** (shops only): a product feed link (Google Merchant RSS / Atom, as exported by Shopify, WooCommerce, Shoptet, Magento or Mergado, or a Heureka XML feed; up to 3,000 products, refreshed hourly) and / or up to 60 products added by hand.
+4. **Products** (shops only): a product feed link (Google Merchant RSS / Atom, as exported by Shopify, WooCommerce, Shoptet, Magento or Mergado, or a Heureka XML feed; up to 3,000 products, refreshed hourly) and / or up to 60 products added by hand. **Choose products** then hides single products or whole categories.
 5. **Code**: **Copy code**.
 
 Building and previewing is free with any account. The code unlocks on an Enterprise plan (<https://www.meltflexai.com/enterprise>). Ask the user to paste the copied code, or just the `https://widget.meltflexai.com/...` address in it. Never invent an embed ID.
@@ -54,6 +54,7 @@ curl -X POST https://www.meltflexai.com/api/v1/embeds \
 
 - `GET` lists embeds; `PATCH` with `id` + fields changes one (`manualProducts` replaces the whole list; `enabled: false` pauses); `DELETE` with `id`.
 - `tool`: `retailer`, `interior`, `staging`, `kitchen`. `language`: `en`, `es`, `de`, `fr`, `pt`. Up to 10 domains, up to 60 `manualProducts` (use a feed for more).
+- Keep products out with `"productFilter": { "hidden": ["<id>"], "hiddenCategories": ["Sofas"] }` (id = the feed's `item_group_id`, else its `id`; hand-added ones are `manual:<id>`). A hidden category also hides products the feed adds to it later. Send the whole filter on each change.
 - Images may be any public https URL; MeltFlex keeps a copy. An unreadable image or feed returns `422` with the reason: fix it and retry.
 - To collect products from the shop's pages, read each product page for name, price, currency, link and the main photo URL. Never invent prices or photos.
 - `link.token` is the embed ID for `https://widget.meltflexai.com/<token>`. It is `null` with `locked: true` until the account has Enterprise; then send the user to the builder to see it and upgrade.
