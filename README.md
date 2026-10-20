@@ -156,7 +156,7 @@ Full reference with response bodies and three.js / Spark loader snippets: <https
 
 <p align="center"><sub>Live on the Kondela furniture shop: shoppers place its own products in a photo of their room, on the shop's own page.</sub></p>
 
-No API key and no backend: build an embed in the [Website Embed Builder](https://www.meltflexai.com/embed-builder) (your domain, logo, colour, language, and for shops your product feed), then paste one iframe. Visitors design their room on your page without an account; each design uses 10 credits from your account. Any account gets the code; it starts working on an [Enterprise plan](https://www.meltflexai.com/enterprise) (until then visitors see "not available").
+No API key and no backend: build an embed in the [Website Embed Builder](https://www.meltflexai.com/embed-builder) (your domain, logo, colour, language, and for shops your product feed), then paste one iframe. Visitors design their room on your page without an account; each design uses 10 credits from your account. Any account gets the code and 10 free designs; after that it runs on an [Enterprise plan](https://www.meltflexai.com/enterprise).
 
 ```html
 <iframe
