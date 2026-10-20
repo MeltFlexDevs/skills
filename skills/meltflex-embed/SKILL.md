@@ -28,7 +28,7 @@ Send the user to <https://www.meltflexai.com/embed-builder> → **New embed**. T
 4. **Products** (shops only): a product feed link (Google Merchant RSS / Atom, as exported by Shopify, WooCommerce, Shoptet, Magento or Mergado, or a Heureka XML feed; up to 3,000 products, refreshed hourly) and / or up to 60 products added by hand. **Choose products** then hides single products or whole categories.
 5. **Code**: **Copy code**.
 
-Building and previewing is free with any account. The code unlocks on an Enterprise plan (<https://www.meltflexai.com/enterprise>). Ask the user to paste the copied code, or just the `https://widget.meltflexai.com/...` address in it. Never invent an embed ID.
+Building, previewing and copying the code is free with any account. The code starts working on an Enterprise plan with credits (<https://www.meltflexai.com/enterprise>); until then visitors see "not available", so it can go on the site first. Ask the user to paste the copied code, or just the `https://widget.meltflexai.com/...` address in it. Never invent an embed ID.
 
 ## 1b. Or build it over the API (API key)
 
@@ -57,7 +57,7 @@ curl -X POST https://www.meltflexai.com/api/v1/embeds \
 - Keep products out with `"productFilter": { "hidden": ["<id>"], "hiddenCategories": ["Sofas"] }` (id = the feed's `item_group_id`, else its `id`; hand-added ones are `manual:<id>`). A hidden category also hides products the feed adds to it later. Send the whole filter on each change.
 - Images may be any public https URL; MeltFlex keeps a copy. An unreadable image or feed returns `422` with the reason: fix it and retry.
 - To collect products from the shop's pages, read each product page for name, price, currency, link and the main photo URL. Never invent prices or photos.
-- `link.token` is the embed ID for `https://widget.meltflexai.com/<token>`. It is `null` with `locked: true` until the account has Enterprise; then send the user to the builder to see it and upgrade.
+- `link.token` is the embed ID for `https://widget.meltflexai.com/<token>`. Every account gets it. `locked: true` means it does not run yet (no Enterprise): give the user the code anyway and tell them it switches on once they upgrade.
 
 ## 2. Put the code on the site
 
