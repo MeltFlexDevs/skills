@@ -1,0 +1,8 @@
+{
+  "name": "meltflex",
+  "version": "0.6.0",
+  "description": "AI interior design: restyle rooms, place furniture and virtually stage spaces from a photo.",
+  "mcpServers": {
+    "meltflex": { "httpUrl": "https://www.meltflexai.com/mcp" }
+  }
+}
